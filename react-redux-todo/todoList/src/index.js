@@ -7,14 +7,6 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import 'font-awesome/css/font-awesome.min.css';
 
-const initialState = {
-  todos: [],
-  filter: 'All'
-};
-
-
-
-console.log(store.getState);
 
 //todo setup Provider here for use store from the './app/store'
 ReactDOM.render(

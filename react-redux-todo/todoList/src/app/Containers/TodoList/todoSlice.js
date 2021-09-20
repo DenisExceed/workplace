@@ -10,7 +10,7 @@ export const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {
-    add: (state = initialState, {payload}) => {  // todo implement function for add new todo into list
+    add: (state, {payload}) => {  // todo implement function for add new todo into list
       let createTodoItem = (text) => {
         const todo = {
          checked: false,
@@ -22,7 +22,7 @@ export const todoSlice = createSlice({
         });
       }
     },
-    remove: (state = initialState, {payload}) => {  // todo implement function for remove todo from the list
+    remove: (state, {payload}) => {  // todo implement function for remove todo from the list
       let deleteTodo = (id) => {
         const newTodos =  this.state.todos.filter(item => item.id !== id);
       
@@ -31,7 +31,7 @@ export const todoSlice = createSlice({
         });
       }
     },
-    markAsChecked: (state = initialState, {payload}) => {  // todo implement function for mark task checked by id
+    markAsChecked: (state, {payload}) => {  // todo implement function for mark task checked by id
       let completeTodo = (id) => {
         const todoIndex = this.state.todos.findIndex(item => item.id === id)
         const todo = this.state.todos;
@@ -43,7 +43,7 @@ export const todoSlice = createSlice({
         });
       }
     },
-    clearCompleted: initialState => {  //todo implement funciton for remove all completed (checked ) tasks
+    clearCompleted: state => {  //todo implement funciton for remove all completed (checked ) tasks
       let deleteCompletedTodos = () => {
         const completed = this.state.todos.filter(item => !item.checked);
       
@@ -52,7 +52,7 @@ export const todoSlice = createSlice({
         });
       }
     },
-    checkAll: initialState => {
+    checkAll: state => {
       let completeAllTodos = () => {
         const checkAll = this.state.todos.every(item => item.checked);
         const unCheckAll = this.state.todos.every(item => !item.checked);

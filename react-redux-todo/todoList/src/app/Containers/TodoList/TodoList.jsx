@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
-
 import {actions}  from './todoSlice';
 /**
  * todo implement component called ToDoInput
@@ -59,9 +58,23 @@ class TodoList extends React.Component {
 
 }
 
-const mapStateToProps = state => ({});  //todo setup this method for get info from the global state
 
-const mapDispatchToProps = dispatch => ({});  //todo implement this function
+const mapStateToProps = (state) => {
+  return {
+    todo: state,
+  };
+}; //todo setup this method for get info from the global state
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    add: (obj) => dispatch(actions.add(obj)),
+    remove: (obj) => dispatch(actions.remove(obj)),
+    markAsChecked: (obj) => dispatch(actions.markAsChecked(obj)),
+    clearCompleted: (obj) => dispatch(actions.clearCompleted(obj)),
+    checkAll: (obj) => dispatch(actions.checkAll(obj)),
+  };
+}; //todo implement this function
+
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList)

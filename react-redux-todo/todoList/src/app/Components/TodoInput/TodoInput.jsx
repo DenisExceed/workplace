@@ -13,7 +13,6 @@ export class TodoInput extends React.Component {
         this.state = { value: '' }
     }
 
- 
     handleChange = (event) => {
         this.setState({ value: event.target.value })
     }

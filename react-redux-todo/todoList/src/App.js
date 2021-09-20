@@ -6,19 +6,19 @@ import Header from "./app/Components/Header/Header"
 import TodoInput from "./app/Components/TodoInput/TodoInput"
 import Card from '@material-ui/core/Card';
 import Footer from './app/Components/Footer/Footer';
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 
 
 
 class App extends React.Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { 
-  //     todos: [],
-  //     filter: 'All'
-  //   };
-  // }
+  constructor(props) {
+    super(props);
+    this.state = { 
+      todos: [],
+      filter: 'All'
+    };
+  }
 
 
 numOfCompleeted = () => {
@@ -58,7 +58,7 @@ render() {
         <Header />
       </header>
       <section>
-      {/* <Card className="allTodo">
+      <Card className="allTodo">
         <TodoInput 
          create = {this.createTodoItem}
         />
@@ -75,7 +75,7 @@ render() {
          filter = {this.setFilter}
          completeAll = {this.completeAllTodos}
         />
-      </Card> */}
+      </Card>
       </section>
     </div>
   );
