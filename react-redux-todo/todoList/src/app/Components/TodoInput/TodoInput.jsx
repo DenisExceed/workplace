@@ -3,6 +3,8 @@ import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/icons/AddBox';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { connect } from 'react-redux'
+
 import { getElementError } from '@testing-library/dom';
 
 
@@ -11,6 +13,7 @@ export class TodoInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = { value: '' }
+
     }
 
     handleChange = (event) => {
@@ -30,8 +33,8 @@ export class TodoInput extends React.Component {
         }
 
         if (event.type === 'click') {
-          this.props.create(this.state.value);
-          document.getElementById('input').value = '';
+           this.props.create(this.state.value);
+           document.getElementById('input').value = '';
         }
 
     } 
@@ -55,4 +58,10 @@ export class TodoInput extends React.Component {
   }
 };
 
-export default TodoInput;
+const mapStateToProps = (state) => {
+  return {
+    todo: state,
+  };
+}
+
+export default connect(mapStateToProps)(TodoInput);

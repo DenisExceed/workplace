@@ -6,18 +6,23 @@ import Header from "./app/Components/Header/Header"
 import TodoInput from "./app/Components/TodoInput/TodoInput"
 import Card from '@material-ui/core/Card';
 import Footer from './app/Components/Footer/Footer';
-// import { connect } from 'react-redux'
+import {actions} from './app/Containers/TodoList/todoSlice';
+import { connect } from 'react-redux'
 
 
 
 class App extends React.Component {
 
   constructor(props) {
+
+    console.log(`props `, props)
     super(props);
     this.state = { 
       todos: [],
       filter: 'All'
     };
+
+    this.addTodoAlex = this.addTodoAlex.bind(this);
   }
 
 
@@ -49,10 +54,18 @@ setCaseFilter = (item) => {
   }
 }
 
+addTodoAlex () {
+  this.props.test('PAYLOAD');
+}
+
 render() {
 
   return (
     <div className="App">
+
+      <div>{this.props.count}</div>
+      <button onClick={this.addTodoAlex}>Add TODO</button>
+
       <header className="App-header">
         {/*todo place your todo header here */}
         <Header />
@@ -82,4 +95,20 @@ render() {
  }
 }
 
-export default App;
+const mstp = (state) => {
+  console.log(`state`, state)
+  return {
+    count: state.todoSlice.count
+  }
+}
+
+const mdtp = (dispatch) => {
+  return {
+    test: (arg) => {
+      dispatch(actions.test(arg));
+    }
+  }
+}
+
+
+export default connect(mstp, mdtp)(App);
