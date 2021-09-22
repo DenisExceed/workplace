@@ -6,7 +6,10 @@ const Trash = (props) => {
 
     return (
   
-        <FontAwesomeIcon onClick={() => props.delete(props.id)} icon={faTrashAlt} className="trash"/>
+        <FontAwesomeIcon 
+        onClick={() => props.remove(props.id)} 
+        icon={faTrashAlt} 
+        className="trash"/>
   
     );
   };

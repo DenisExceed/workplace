@@ -12,7 +12,7 @@ import {actions}  from './todoSlice';
 //import ToDoInput from "../../Components/TodoInput/ToDoInput";
 import {bindActionCreators} from "../../utils/store";
 
-import './TodoList.scss'
+import './TodoList.scss';
 
 
 /**
@@ -25,17 +25,7 @@ import './TodoList.scss'
 /**
  * todo implement HOC for display the list of the todos and control panel and input for add new todos
  */
-class TodoList extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {   //todo setup local state
-
-    };
-  }
-  
-
- render() {
+const TodoList = () => {
 
     const todoItems = this.props.todos.map(item => {
       return <TodoItem 
@@ -54,27 +44,8 @@ class TodoList extends React.Component {
         </ul>
       </div>
     );
-  }
 
 }
 
 
-const mapStateToProps = (state) => {
-  return {
-    todo: state,
-  };
-}; //todo setup this method for get info from the global state
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    add: (obj) => dispatch(actions.add(obj)),
-    remove: (obj) => dispatch(actions.remove(obj)),
-    markAsChecked: (obj) => dispatch(actions.markAsChecked(obj)),
-    clearCompleted: (obj) => dispatch(actions.clearCompleted(obj)),
-    checkAll: (obj) => dispatch(actions.checkAll(obj)),
-  };
-}; //todo implement this function
-
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList)
+export default TodoList;

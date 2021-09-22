@@ -2,12 +2,12 @@
 import React from 'react';
 import './App.css';
 import TodoList from "./app/Containers/TodoList/TodoList";
-import Header from "./app/Components/Header/Header"
-import TodoInput from "./app/Components/TodoInput/TodoInput"
+import Header from "./app/Components/Header/Header";
+import TodoInput from "./app/Components/TodoInput/TodoInput";
 import Card from '@material-ui/core/Card';
 import Footer from './app/Components/Footer/Footer';
 import {actions} from './app/Containers/TodoList/todoSlice';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 
 
@@ -15,7 +15,6 @@ class App extends React.Component {
 
   constructor(props) {
 
-    console.log(`props `, props)
     super(props);
     this.state = { 
       todos: [],
@@ -96,7 +95,6 @@ render() {
 }
 
 const mstp = (state) => {
-  console.log(`state`, state)
   return {
     count: state.todoSlice.count
   }

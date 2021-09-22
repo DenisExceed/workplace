@@ -1,7 +1,25 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import './Footer.scss'
+import './Footer.scss';
+import { connect } from 'react-redux';
+import { actions } from '../../Containers/TodoList/todoSlice';
+
+const mapStateToProps = (state) => {
+  return {
+    todo: state,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    add: (obj) => dispatch(actions.add(obj)),
+    remove: (id) => dispatch(actions.remove(id)),
+    markAsChecked: (id) => dispatch(actions.markAsChecked(id)),
+    clearCompleted: (obj) => dispatch(actions.clearCompleted(obj)),
+    checkAll: (obj) => dispatch(actions.checkAll(obj)),
+    };
+};
 
 const Footer = (props) => {
  
@@ -28,4 +46,4 @@ const Footer = (props) => {
     );
   };
   
-  export default Footer;
+  export default connect(mapStateToProps, mapDispatchToProps)(Footer);

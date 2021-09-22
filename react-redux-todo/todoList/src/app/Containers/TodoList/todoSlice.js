@@ -15,8 +15,6 @@ export const initialState = {
   // tasks: [],  // task should have a format {id: unique_value, text: taks_text, checked: flag_show_if_task_completed (false by default) }
   todos: [],
   filter: 'All',
-  id: 0,
-  count: 0,
 };
 
 
@@ -25,31 +23,27 @@ export const todoSlice = createSlice({
   initialState,
   reducers: {
 
-    test: (state, data) => {
-      return {
-        ...state,
-        count: state.count + 1
-      };
-    },
-    /**
-     * text: string;
-     */
-    add: (state = initialState, text) => {  // todo implement function for add new todo into list
-
+    // test: (state, data) => {
+    //   return {
+    //     ...state,
+    //     count: state.count + 1
+    //   };
+    // },
+    // /**
+    //  * text: string;
+    //  */
+    add: (state, action) => {  // todo implement function for add new todo into list
+        this.state.push(action.payload)
         return {
           ...state,
-          todos: [...state.todos, {
-            text,
-            checked: false,
-            id: (Math.random()).toFixed(3),
-          }]
+          todos: [...state.todos]
         };
       }
     },
 
-    remove: (state = initialState, {payload}) => {  // todo implement function for remove todo from the list
+    remove: (state, action) => {  // todo implement function for remove todo from the list
 
-        const newTodos =  this.state.todos.filter(item => item.id !== item.id);
+        const newTodos =  this.state.todos.filter(item => item.id !== action.payload);
       
         return {
           ...state,
@@ -57,9 +51,9 @@ export const todoSlice = createSlice({
         };
     },
 
-    markAsChecked: (state = initialState, {payload}) => {  // todo implement function for mark task checked by id
+    markAsChecked: (state, action) => {  // todo implement function for mark task checked by id
 
-        const todoIndex = this.state.todos.findIndex(item => item.id === item.id)
+        const todoIndex = this.state.todos.findIndex(item => item.id === action.payload)
         const todo = this.state.todos;
         
         todo[todoIndex].checked = !todo[todoIndex].checked;
