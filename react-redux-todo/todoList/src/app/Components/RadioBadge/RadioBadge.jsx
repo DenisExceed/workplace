@@ -1,6 +1,8 @@
 import React from 'react';
 import '../TodoItem/TodoItem.scss';
 import { Checkbox } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import {actions}  from '../../Containers/TodoList/todoSlice';
 
 
 /**
@@ -15,9 +17,17 @@ import { Checkbox } from '@material-ui/core';
  *
  */
 const RadioBadge = (props) => {
+
+  const dispatch = useDispatch()
+
+  let onClickMark = (id) => {
+    dispatch(actions.markAsChecked(id))
+  }
+
+
   return (
     <Checkbox 
-    onChange = {() => props.complete(props.id)} 
+    onChange = {() => onClickMark(props.id)} 
     completeAll = {props.completeAll}
     checked = {props.checked}
     />

@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import TodoItem from '../../Components/TodoItem/TodoItem';
 import {actions}  from './todoSlice';
+
 /**
  * todo implement component called ToDoInput
  * which should receive onSubmit function which will be called on the press enter key
@@ -25,9 +26,30 @@ import './TodoList.scss';
 /**
  * todo implement HOC for display the list of the todos and control panel and input for add new todos
  */
-const TodoList = () => {
 
-    const todoItems = this.props.todos.map(item => {
+const mapStateToProps = (state) => {
+  return {
+    ...state
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    todos: (arg) => {
+      dispatch(actions.todos(arg));
+    },
+    add: (arg) => {
+      dispatch(actions.add(arg));
+    }
+
+  }
+}
+
+class TodoList extends React.Component {
+
+ render() {
+
+  const todoItems = this.props.todoSlice.todos.map(item => {
       return <TodoItem 
       key={item.id} 
       todo={item}
@@ -45,7 +67,8 @@ const TodoList = () => {
       </div>
     );
 
+  }
 }
 
 
-export default TodoList;
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

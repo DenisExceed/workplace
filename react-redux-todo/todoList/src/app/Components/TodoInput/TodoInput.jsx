@@ -10,13 +10,14 @@ import { actions } from '../../Containers/TodoList/todoSlice';
 
 const mapStateToProps = (state) => {
   return {
-    todo: state,
+   ...state
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    add: (obj) => dispatch(actions.add(obj)),
+    changeInput: (value) => dispatch(actions.handleChange(value)),
+    submitInput: (obj) => dispatch(actions.add(obj)),
     remove: (id) => dispatch(actions.remove(id)),
     markAsChecked: (id) => dispatch(actions.markAsChecked(id)),
     clearCompleted: (obj) => dispatch(actions.clearCompleted(obj)),
@@ -24,59 +25,42 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const TodoInput = (props) => {
+export class TodoInput extends React.Component {
 
-  const [todo, setTodo] = useState('');
 
-  const handleChange = (event) => {
-        setTodo(event.target.value);
+
+  handleChange = (event) => {
+    this.props.changeInput(event.target.value)
+  }
+
+  handleSubmit = (event) => {
+  
+    if (event.key === 'Enter' || event.type === 'click') {
+      this.props.submitInput();
+      this.props.changeInput('');
     }
 
-  const handleSubmit = (event) => {
-  
-        if (event.target.value === '') {
-            return;
-        }
+}
 
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            this.props.create(this.state.value)
-            this.setState({
-              value: ''
-            });
-            event.target.value = '';
-        }
-
-        if (event.type === 'click') {
-            event.preventDefault();
-            this.props.create(this.state.value)
-            this.setState({
-              value: ''
-            });
-            document.getElementById('input').value = '';
-        }
-
-    } 
-
+render() {
    return (
    <div className="allTodoAdd">
-    <Input id="input" 
-      onKeyPress = {(event) => handleSubmit(event)}
-      onChange = {(event) => handleChange(event)} 
-      className ="allTodoInput" placeholder="Enter your task" 
+    <Input id ="input" 
+      value = {this.props.todoSlice.value}
+      onKeyPress = {this.handleSubmit}
+      onChange = {this.handleChange} 
+      className ="allTodoInput" 
+      placeholder="Enter your task" 
       inputProps = {{ 'aria-label': 'description' }}
       endAdornment={
         <InputAdornment position="end">
-          <IconButton onClick={() => props.add({
-                        id: (Math.random()).toFixed(3),
-                        checked: false,
-                        item: todo,
-          })}>
+          <IconButton onClick={this.handleSubmit}>
             <AddBoxIcon className="hand"/>
           </IconButton>
         </InputAdornment>} 
     />
    </div>);
+  }
 
 };
 

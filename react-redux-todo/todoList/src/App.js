@@ -62,7 +62,7 @@ render() {
   return (
     <div className="App">
 
-      <div>{this.props.count}</div>
+      {/* <div>{console.log(this.props.add)}</div> */}
       <button onClick={this.addTodoAlex}>Add TODO</button>
 
       <header className="App-header">
@@ -72,20 +72,20 @@ render() {
       <section>
       <Card className="allTodo">
         <TodoInput 
-         create = {this.createTodoItem}
+         create = {this.props.add}
         />
         <TodoList 
-         complete = {this.completeTodo} 
+         complete = {this.props.markAsChecked} 
          todos = {this.state.todos.filter(this.setCaseFilter)}
-         delete = {this.deleteTodo}
+         delete = {this.props.remove}
         />
         <Footer 
          todos = {this.state.todos.length}
          numOfNotCompleted = {this.numOfNotCompleeted}
          numOfCompleted = {this.numOfCompleeted}
-         deleteCompletedTodos = {this.deleteCompletedTodos}
+         deleteCompletedTodos = {this.props.clearCompleted}
          filter = {this.setFilter}
-         completeAll = {this.completeAllTodos}
+         completeAll = {this.props.checkAll}
         />
       </Card>
       </section>
@@ -96,14 +96,31 @@ render() {
 
 const mstp = (state) => {
   return {
-    count: state.todoSlice.count
+    count: state.todoSlice.count,
+    add: state.todoSlice.add,
+    remove: state.todoSlice.remove,
+    markAsChecked: state.todoSlice.markAsChecked,
+    clearCompleted: state.todoSlice.clearCompleted,
+    checkAll: state.todoSlice.checkAll,
   }
 }
 
 const mdtp = (dispatch) => {
   return {
-    test: (arg) => {
-      dispatch(actions.test(arg));
+    add: (arg) => {
+      dispatch(actions.add(arg));
+    },
+    remove: (arg) => {
+      dispatch(actions.remove(arg));
+    },
+    markAsChecked: (arg) => {
+      dispatch(actions.markAsChecked(arg));
+    },
+    clearCompleted: (arg) => {
+      dispatch(actions.clearCompleted(arg));
+    },
+    checkAll: (arg) => {
+      dispatch(actions.checkAll(arg));
     }
   }
 }

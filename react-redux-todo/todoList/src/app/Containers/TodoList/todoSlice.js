@@ -1,20 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import {
-  SHOW_ALL,
-  SHOW_COMPLETED,
-  SHOW_ACTIVE,
-  ADD,
-  DELETE,
-  MARK_AS_CHECKED,
-  CLEAR_COMPLETED,
-  CHECK_ALL
-} from '../../constants/todo'
 
 export const initialState = {
   // tasks: [],  // task should have a format {id: unique_value, text: taks_text, checked: flag_show_if_task_completed (false by default) }
   todos: [],
   filter: 'All',
+  item: '',
+  id: 0,
+  value: '',
 };
 
 
@@ -24,26 +17,41 @@ export const todoSlice = createSlice({
   reducers: {
 
     // test: (state, data) => {
+
     //   return {
     //     ...state,
-    //     count: state.count + 1
+    //     count: state.count,
+    //     templ: state.templ
     //   };
     // },
     // /**
     //  * text: string;
     //  */
-    add: (state, action) => {  // todo implement function for add new todo into list
-        this.state.push(action.payload)
-        return {
-          ...state,
-          todos: [...state.todos]
-        };
-      }
+    handleChange: (state = initialState, {payload}) => {
+      
+      return {
+        ...state,
+        value: payload
+      };
     },
 
-    remove: (state, action) => {  // todo implement function for remove todo from the list
+    add: (state = initialState, {payload}) => {  // todo implement function for add new todo into list
+        const todo = {
+         id: (Math.random()).toFixed(3),
+         checked: false 
+        }
+        let text = state.value;
 
-        const newTodos =  this.state.todos.filter(item => item.id !== action.payload);
+      return {
+        ...state,
+        todos: [{...todo, text}, ...state.todos]
+      };
+    },
+
+    remove: (state = initialState, {payload}) => {  // todo implement function for remove todo from the list
+
+      const id = payload;
+      const newTodos =  state.todos.filter(item => item.id !== id);
       
         return {
           ...state,
@@ -51,12 +59,13 @@ export const todoSlice = createSlice({
         };
     },
 
-    markAsChecked: (state, action) => {  // todo implement function for mark task checked by id
+    markAsChecked: (state = initialState, {payload}) => {  // todo implement function for mark task checked by id
 
-        const todoIndex = this.state.todos.findIndex(item => item.id === action.payload)
-        const todo = this.state.todos;
-        
-        todo[todoIndex].checked = !todo[todoIndex].checked;
+      const id = payload;
+      const todoIndex = state.todos.findIndex(item => item.id === id);
+      const todo = state.todos;
+
+      todo[todoIndex].checked = !todo[todoIndex].checked;
       
         return {
           todos: [...state.todos]
@@ -64,7 +73,7 @@ export const todoSlice = createSlice({
     },
 
     clearCompleted: state => {  //todo implement funciton for remove all completed (checked ) tasks
-        const completed = this.state.todos.filter(item => !item.checked);
+       const completed = state.todos.filter(item => !item.checked);
       
         return {
           todos: completed
@@ -72,13 +81,13 @@ export const todoSlice = createSlice({
     },
 
     checkAll: state => {
-        const checkAll = this.state.todos.every(item => item.checked);
-        const unCheckAll = this.state.todos.every(item => !item.checked);
+        const checkAll = state.todos.every(item => item.checked);
+        const unCheckAll = state.todos.every(item => !item.checked);
       
         let completeTodos;
       
         const mapAllTodos = (checkStatus) => {
-          completeTodos = this.state.todos.map(item => {
+          completeTodos = state.todos.map(item => {
             item.checked = checkStatus ? !item.checked : true;
             return item;
            });
@@ -94,6 +103,7 @@ export const todoSlice = createSlice({
           todos: completeTodos
         }; 
     }
+  }  
 });
 
 
