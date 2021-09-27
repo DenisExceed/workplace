@@ -1,10 +1,10 @@
+/* eslint-disable default-case */
 import { createSlice } from '@reduxjs/toolkit';
 
 
 export const initialState = {
   // tasks: [],  // task should have a format {id: unique_value, text: taks_text, checked: flag_show_if_task_completed (false by default) }
   todos: [],
-  filter: 'All',
   item: '',
   id: 0,
   value: '',
@@ -16,17 +16,6 @@ export const todoSlice = createSlice({
   initialState,
   reducers: {
 
-    // test: (state, data) => {
-
-    //   return {
-    //     ...state,
-    //     count: state.count,
-    //     templ: state.templ
-    //   };
-    // },
-    // /**
-    //  * text: string;
-    //  */
     handleChange: (state = initialState, {payload}) => {
       
       return {
@@ -34,6 +23,7 @@ export const todoSlice = createSlice({
         value: payload
       };
     },
+
 
     add: (state = initialState, {payload}) => {  // todo implement function for add new todo into list
         const todo = {
@@ -62,17 +52,14 @@ export const todoSlice = createSlice({
     markAsChecked: (state = initialState, {payload}) => {  // todo implement function for mark task checked by id
 
       const id = payload;
-      const todoIndex = state.todos.findIndex(item => item.id === id);
-      const todo = state.todos;
+      const todoIndex = state.todos.find(item => item.id === id);
 
-      todo[todoIndex].checked = !todo[todoIndex].checked;
-      
-        return {
-          todos: [...state.todos]
-        };
+      if (todoIndex) {
+        todoIndex.checked = !todoIndex.checked;
+      }
     },
 
-    clearCompleted: state => {  //todo implement funciton for remove all completed (checked ) tasks
+    clearCompleted: (state) => {  //todo implement funciton for remove all completed (checked ) tasks
        const completed = state.todos.filter(item => !item.checked);
       
         return {
@@ -80,28 +67,23 @@ export const todoSlice = createSlice({
         };    
     },
 
-    checkAll: state => {
-        const checkAll = state.todos.every(item => item.checked);
+    checkAll: (state) => {
+
+        const checkAllItem = state.todos.every(item => item.checked);
         const unCheckAll = state.todos.every(item => !item.checked);
-      
-        let completeTodos;
-      
+          
         const mapAllTodos = (checkStatus) => {
-          completeTodos = state.todos.map(item => {
-            item.checked = checkStatus ? !item.checked : true;
-            return item;
-           });
-          }
+          state.todos.map(item => { 
+            return ( item.checked = checkStatus ? !item.checked : true )
+          });
+        }
       
-        if (checkAll || unCheckAll) {
+        if (checkAllItem || unCheckAll) {
            mapAllTodos(true);
-         } else {
+          } else {
            mapAllTodos(false);
         }
       
-        return {
-          todos: completeTodos
-        }; 
     }
   }  
 });

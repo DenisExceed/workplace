@@ -18,10 +18,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeInput: (value) => dispatch(actions.handleChange(value)),
     submitInput: (obj) => dispatch(actions.add(obj)),
-    remove: (id) => dispatch(actions.remove(id)),
-    markAsChecked: (id) => dispatch(actions.markAsChecked(id)),
-    clearCompleted: (obj) => dispatch(actions.clearCompleted(obj)),
-    checkAll: (obj) => dispatch(actions.checkAll(obj)),
     };
 };
 

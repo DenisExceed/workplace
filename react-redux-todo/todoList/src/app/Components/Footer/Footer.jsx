@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -7,33 +8,70 @@ import { actions } from '../../Containers/TodoList/todoSlice';
 
 const mapStateToProps = (state) => {
   return {
-    todo: state,
+    ...state
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    add: (obj) => dispatch(actions.add(obj)),
-    remove: (id) => dispatch(actions.remove(id)),
-    markAsChecked: (id) => dispatch(actions.markAsChecked(id)),
-    clearCompleted: (obj) => dispatch(actions.clearCompleted(obj)),
-    checkAll: (obj) => dispatch(actions.checkAll(obj)),
+    checkAll: () => dispatch(actions.checkAll()),
+    clearCompleted: () => dispatch(actions.clearCompleted()),
     };
 };
 
-const Footer = (props) => {
- 
+const numOfCompleted = (state) => {
+  const completed = state.todoSlice.todos.filter(item => item.checked);
+  return completed.length;
+}
+
+const numOfNotCompleted = (state) => {
+  const notCompleted = state.todoSlice.todos.filter(item => item.checked === false);
+  return notCompleted.length;
+}
+
+const setCaseFilter = {
+
+  All: (state) => {
+    console.log(state, "111111");
+    return {
+      ...state.todos
+    }
+  },
+
+  ToDo: (state) => {
+    console.log('2222222');
+    const notCompleted = state.todoSlice.todos.filter(item => item.checked === false);
+    return notCompleted;  
+  },
+
+  Completed: (state) => {
+    console.log('333333');
+    const completed = state.todoSlice.todos.filter(item => item.checked);
+    return completed;
+  }
+
+};
+
+
+
+
+
+
+const Footer = (state) => {
+
     let todoFooter = () => {
-        if(props.todos > 0) {
+
+        if(state.todoSlice.todos.length > 0) {
+
             return (
               <div className="footer">
-               <Button onClick={props.completeAll} className="small">{props.numOfNotCompleted()} tasks left</Button>  
+               <Button onClick={state.checkAll} className="small">{numOfNotCompleted(state)} tasks left</Button>  
                <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
-                <Button onClick={() => props.filter('All')}>All</Button>
-                <Button onClick={() => props.filter('ToDo')}>ToDo</Button>
-                <Button onClick={() => props.filter('Completed')}>Completed</Button>
+               <Button onClick={() => setCaseFilter.All(state)}>All</Button>
+               <Button onClick={() => setCaseFilter.ToDo(state)}>ToDo</Button>
+               <Button onClick={() => setCaseFilter.Completed(state)}>Completed</Button>
                </ButtonGroup>
-               {!!props.numOfCompleted() && <Button onClick={props.deleteCompletedTodos} className="small">Clear completed</Button>}
+               {!!numOfCompleted(state) && <Button onClick={state.clearCompleted} className="small">Clear completed</Button>}
               </div>
             );
            }
