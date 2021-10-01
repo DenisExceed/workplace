@@ -5,6 +5,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import './Footer.scss';
 import { connect } from 'react-redux';
 import { actions } from '../../Containers/TodoList/todoSlice';
+import store from '../../store';
 
 const mapStateToProps = (state) => {
   return {
@@ -16,6 +17,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     checkAll: () => dispatch(actions.checkAll()),
     clearCompleted: () => dispatch(actions.clearCompleted()),
+    All: () => dispatch(actions.All()),
+    ToDo: () => dispatch(actions.ToDo()),
+    Completed: () => dispatch(actions.Completed()),
     };
 };
 
@@ -25,51 +29,27 @@ const numOfCompleted = (state) => {
 }
 
 const numOfNotCompleted = (state) => {
-  const notCompleted = state.todoSlice.todos.filter(item => item.checked === false);
+  const notCompleted = state.todoSlice.todos.filter(item => !item.checked);
   return notCompleted.length;
 }
 
-const setCaseFilter = {
-
-  All: (state) => {
-    console.log(state, "111111");
-    return {
-      ...state.todos
-    }
-  },
-
-  ToDo: (state) => {
-    console.log('2222222');
-    const notCompleted = state.todoSlice.todos.filter(item => item.checked === false);
-    return notCompleted;  
-  },
-
-  Completed: (state) => {
-    console.log('333333');
-    const completed = state.todoSlice.todos.filter(item => item.checked);
-    return completed;
-  }
-
-};
-
-
-
-
-
 
 const Footer = (state) => {
+
 
     let todoFooter = () => {
 
         if(state.todoSlice.todos.length > 0) {
 
+
             return (
               <div className="footer">
                <Button onClick={state.checkAll} className="small">{numOfNotCompleted(state)} tasks left</Button>  
                <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
-               <Button onClick={() => setCaseFilter.All(state)}>All</Button>
-               <Button onClick={() => setCaseFilter.ToDo(state)}>ToDo</Button>
-               <Button onClick={() => setCaseFilter.Completed(state)}>Completed</Button>
+               <Button onClick={state.All}>All</Button>
+               <Button onClick={state.ToDo}>ToDo</Button>
+               <Button onClick={state.Completed}>Completed</Button>
+
                </ButtonGroup>
                {!!numOfCompleted(state) && <Button onClick={state.clearCompleted} className="small">Clear completed</Button>}
               </div>

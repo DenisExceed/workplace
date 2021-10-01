@@ -1,13 +1,15 @@
 /* eslint-disable default-case */
+import { Subscriptions } from '@material-ui/icons';
 import { createSlice } from '@reduxjs/toolkit';
 
 
 export const initialState = {
   // tasks: [],  // task should have a format {id: unique_value, text: taks_text, checked: flag_show_if_task_completed (false by default) }
-  todos: [],
+  todos: JSON.parse(localStorage.getItem('todos') || []),
   item: '',
   id: 0,
   value: '',
+  status: 'All',
 };
 
 
@@ -17,7 +19,10 @@ export const todoSlice = createSlice({
   reducers: {
 
     handleChange: (state = initialState, {payload}) => {
-      
+
+ 
+     
+
       return {
         ...state,
         value: payload
@@ -26,15 +31,24 @@ export const todoSlice = createSlice({
 
 
     add: (state = initialState, {payload}) => {  // todo implement function for add new todo into list
-        const todo = {
+
+      if (!state.value.length || state.value === '' || state.value.trim() === '') { return state }
+
+         const todo = {
          id: (Math.random()).toFixed(3),
          checked: false 
         }
         let text = state.value;
 
+
+        const newTodos = [{...todo, text}, ...state.todos];
+
+
+        localStorage.setItem('todos', JSON.stringify(newTodos));
+
       return {
         ...state,
-        todos: [{...todo, text}, ...state.todos]
+        todos: newTodos,
       };
     },
 
@@ -42,49 +56,91 @@ export const todoSlice = createSlice({
 
       const id = payload;
       const newTodos =  state.todos.filter(item => item.id !== id);
+
+
+
+      localStorage.setItem('todos', JSON.stringify(newTodos));
       
         return {
           ...state,
-          todos: newTodos
+          todos: newTodos,
         };
     },
 
     markAsChecked: (state = initialState, {payload}) => {  // todo implement function for mark task checked by id
 
       const id = payload;
-      const todoIndex = state.todos.find(item => item.id === id);
+      const todos = [...state.todos].map(({...item}) => {
+        if (item.id === id) {
+          item.checked = !item.checked;
+        }
 
-      if (todoIndex) {
-        todoIndex.checked = !todoIndex.checked;
+        return item
+      });
+
+      localStorage.setItem('todos', JSON.stringify(todos));
+
+      return {
+        ...state,
+        todos: todos,
       }
+
     },
 
     clearCompleted: (state) => {  //todo implement funciton for remove all completed (checked ) tasks
        const completed = state.todos.filter(item => !item.checked);
+
+       localStorage.setItem('todos', JSON.stringify(completed));
       
         return {
-          todos: completed
+          ...state,
+          todos: completed,
         };    
     },
 
     checkAll: (state) => {
 
-        const checkAllItem = state.todos.every(item => item.checked);
-        const unCheckAll = state.todos.every(item => !item.checked);
+        const status = state.todos.some(item => item.checked);
           
         const mapAllTodos = (checkStatus) => {
-          state.todos.map(item => { 
-            return ( item.checked = checkStatus ? !item.checked : true )
+
+          return [...state.todos].map(({...item}) => { 
+            item.checked = checkStatus;
+            return item;
           });
         }
-      
-        if (checkAllItem || unCheckAll) {
-           mapAllTodos(true);
-          } else {
-           mapAllTodos(false);
-        }
-      
+
+        const todos = mapAllTodos(!status);
+
+        localStorage.setItem('todos', JSON.stringify(todos));
+
+        return {
+          ...state,
+          todos: todos,
+        };  
+    },
+
+    All: (state) => {
+      return {
+        ...state,
+        status: 'All',
+      };
+    },
+    
+    ToDo: (state) => {
+      return {
+        ...state,
+        status: 'Todo',
+      }; 
+    },
+
+    Completed: (state) => {
+      return {
+        ...state,
+        status: 'Completed',
+      };
     }
+
   }  
 });
 

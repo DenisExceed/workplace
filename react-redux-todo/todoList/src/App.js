@@ -35,7 +35,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-
 class App extends React.Component {
 
  
