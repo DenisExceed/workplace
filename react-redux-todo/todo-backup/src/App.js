@@ -19,7 +19,7 @@ class App extends React.Component {
     };
   }
 
-  createTodoItem = (text) => {
+createTodoItem = (text) => {
     const todo = {
      checked: false,
      id: (Math.random()).toFixed(2), 

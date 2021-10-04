@@ -5,7 +5,6 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import './Footer.scss';
 import { connect } from 'react-redux';
 import { actions } from '../../Containers/TodoList/todoSlice';
-import store from '../../store';
 
 const mapStateToProps = (state) => {
   return {
@@ -40,7 +39,6 @@ const Footer = (state) => {
     let todoFooter = () => {
 
         if(state.todoSlice.todos.length > 0) {
-
 
             return (
               <div className="footer">

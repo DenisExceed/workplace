@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import { Subscriptions } from '@material-ui/icons';
+// import { Subscriptions } from '@material-ui/icons';
 import { createSlice } from '@reduxjs/toolkit';
 
 
@@ -20,10 +20,7 @@ export const todoSlice = createSlice({
 
     handleChange: (state = initialState, {payload}) => {
 
- 
-     
-
-      return {
+       return {
         ...state,
         value: payload
       };
@@ -40,9 +37,7 @@ export const todoSlice = createSlice({
         }
         let text = state.value;
 
-
         const newTodos = [{...todo, text}, ...state.todos];
-
 
         localStorage.setItem('todos', JSON.stringify(newTodos));
 
@@ -56,8 +51,6 @@ export const todoSlice = createSlice({
 
       const id = payload;
       const newTodos =  state.todos.filter(item => item.id !== id);
-
-
 
       localStorage.setItem('todos', JSON.stringify(newTodos));
       
@@ -146,6 +139,5 @@ export const todoSlice = createSlice({
 
 
 export const actions = todoSlice.actions;
-
 
 export default todoSlice.reducer;

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/icons/AddBox';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { connect } from 'react-redux';
 
-import { getElementError } from '@testing-library/dom';
+//import { getElementError } from '@testing-library/dom';
 import { actions } from '../../Containers/TodoList/todoSlice';
 
 const mapStateToProps = (state) => {

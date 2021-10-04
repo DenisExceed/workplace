@@ -10,7 +10,7 @@ import TodoItem from '../../Components/TodoItem/TodoItem';
  * Use this component for enter tasks name
  */
 //import ToDoInput from "../../Components/TodoInput/ToDoInput";
-import {bindActionCreators} from "../../utils/store";
+//import {bindActionCreators} from "../../utils/store";
 
 import './TodoList.scss';
 

@@ -7,10 +7,6 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import 'font-awesome/css/font-awesome.min.css';
 
-store.subscribe (() => {
-  localStorage.setItem('reduxState', JSON.stringify(store.getState()))
-})
-
 //todo setup Provider here for use store from the './app/store'
 ReactDOM.render(
   <React.StrictMode>

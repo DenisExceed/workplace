@@ -28,7 +28,6 @@ const RadioBadge = (props) => {
   return (
     <Checkbox 
     onChange = {() => onClickMark(props.id)} 
-    completeAll = {props.completeAll}
     checked = {props.checked}
     />
   );

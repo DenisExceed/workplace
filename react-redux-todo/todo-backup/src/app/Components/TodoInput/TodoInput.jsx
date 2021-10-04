@@ -23,10 +23,15 @@ export class TodoInput extends React.Component {
             return;
         }
 
-        if (event.key === 'Enter' || event.type === 'click') {
+        if (event.key === 'Enter') {
             event.preventDefault();
             this.props.create(this.state.value);
             event.target.value = '';
+        }
+
+        if (event.type === 'click') {
+          this.props.create(this.state.value);
+          document.getElementById('input').value = '';
         }
 
     } 
@@ -34,10 +39,11 @@ export class TodoInput extends React.Component {
   render() {
    return (
    <div className="allTodoAdd">
-    <Input 
+    <Input id="input" 
       onKeyPress = {this.handleSubmit}
       onChange = {this.handleChange} 
-      className ="allTodoInput" placeholder="Enter your task" 
+      className ="allTodoInput" 
+      placeholder="Enter your task" 
       inputProps = {{ 'aria-label': 'description' }}
       endAdornment={
         <InputAdornment position="end">
