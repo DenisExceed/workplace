@@ -24,13 +24,13 @@ export default function TodoItem(props){
       <li id={props.todo.id}>
        <div className="itemsEl">
         <RadioBadge
-          id={props.todo.id}
+          id={props.todo._id}
           complete={props.complete}
           checked = {props.todo.checked}
         />
-        <span id="itemText" className={props.todo.checked ? 'checked' : ''}>{props.todo.text}</span>
+        <span id="itemText" className={props.todo.checked ? 'checked' : ''}>{props.todo.value}</span>
         <Trash 
-          id={props.todo.id}
+          id={props.todo._id}
           delete={props.delete}/>
        </div> 
       </li>

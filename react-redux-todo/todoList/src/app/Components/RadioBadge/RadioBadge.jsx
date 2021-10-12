@@ -2,7 +2,7 @@ import React from 'react';
 import '../TodoItem/TodoItem.scss';
 import { Checkbox } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import {actions}  from '../../Containers/TodoList/todoSlice';
+import { actions }  from '../../Containers/TodoList/todoSlice';
 
 
 /**
@@ -20,7 +20,7 @@ const RadioBadge = (props) => {
 
   const dispatch = useDispatch()
 
-  let onClickMark = (id) => {
+  const onClickMark = (id) => {
     dispatch(actions.markAsChecked(id))
   }
 

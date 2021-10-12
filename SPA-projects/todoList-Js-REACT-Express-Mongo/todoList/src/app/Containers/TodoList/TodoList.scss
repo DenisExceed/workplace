@@ -1,0 +1,16 @@
+//todo implement styles for the TodoList here
+
+.my-todo {
+    display: flex;
+    flex-direction: row;
+    margin: 10px auto;
+    max-width: 500px;
+    align-items:center;
+    border-bottom: 1px solid #E0DEE0;
+    max-height: 450px;
+    overflow: auto;
+}
+
+.my-todo ::-webkit-scrollbar {
+    width: 0;
+  }

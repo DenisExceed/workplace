@@ -33,14 +33,13 @@ const mapStateToProps = (state) => {
 }
 
 class TodoList extends React.Component {
-
 render() {
 
   const todoItems = this.props.todoSlice.todos
   .filter(i => this.props.todoSlice.status === 'Completed' ? i.checked : this.props.todoSlice.status === 'Todo' ? !i.checked : true)
   .map(item => {
       return <TodoItem 
-      key = {item.id} 
+      key = {item._id} 
       todo = {item}
       checked = {this.props.checked}
       />
