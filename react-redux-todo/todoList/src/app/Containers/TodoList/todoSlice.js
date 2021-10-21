@@ -1,11 +1,8 @@
-/* eslint-disable default-case */
-// import { Subscriptions } from '@material-ui/icons';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 
 export const initialState = {
-  // tasks: [],  // task should have a format {id: unique_value, text: taks_text, checked: flag_show_if_task_completed (false by default) }
   todos: [],
   item: '',
   value: '',
@@ -17,7 +14,6 @@ export const createItem = createAsyncThunk(
 
 'Add:',
   async (text) => {
-
     const newTodo = await axios
       .post(`http://localhost:5000`, { value: text, checked: false })
       .then((res) => {
@@ -44,7 +40,6 @@ export const todoSlice = createSlice({
   reducers: {
 
     handleChange: (state = initialState, { payload }) => {
-
        return {
         ...state,
         value: payload
@@ -59,7 +54,7 @@ export const todoSlice = createSlice({
     },
 
 
-    remove: (state = initialState, {payload}) => {  // todo implement function for remove todo from the list
+    remove: (state = initialState, {payload}) => {  
 
       const id = payload;
       const newTodos =  state.todos.filter(item => item._id !== id);
@@ -67,14 +62,13 @@ export const todoSlice = createSlice({
       axios
       .delete(`http://localhost:5000/${id}/`)
       
-      
         return {
           ...state,
           todos: newTodos
         };
     },
 
-    markAsChecked: (state = initialState, {payload}) => {  // todo implement function for mark task checked by id
+    markAsChecked: (state = initialState, {payload}) => {  
 
       const id = payload;
 
@@ -101,16 +95,14 @@ export const todoSlice = createSlice({
 
     },
 
-    clearCompleted: (state) => {  //todo implement funciton for remove all completed (checked ) tasks
+    clearCompleted: (state) => {  
       
-
       const notCompleted = state.todos.filter(item => !item.checked);
       const completed = state.todos.filter(item => item.checked);
 
       axios
       .post('http://localhost:5000/deleteChecked', {itemId: completed.map(item => item._id)});
 
-      
         return {
           ...state,
           todos: notCompleted
@@ -143,7 +135,6 @@ export const todoSlice = createSlice({
 
         const todos = mapAllTodos(!status);
    
-
         return {
           ...state,
           todos: todos,
@@ -173,18 +164,16 @@ export const todoSlice = createSlice({
 
   },
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
+
     builder.addCase(
       
       createItem.fulfilled, (state, action) => {
-      // Add user to the state array
        state.todos.push(action.payload)
       }
 
     )
   },
 });
-
 
 export const actions = todoSlice.actions;
 

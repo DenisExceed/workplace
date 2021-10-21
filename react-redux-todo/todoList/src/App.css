@@ -44,20 +44,3 @@
  padding: 10px;
  margin: 0 auto;
 }
-
-.allTodoAdd {
-  display: flex;
-}
-
-.allTodoInput {
- width: 505px;
-}
-
-.trash {
-  padding: 0 15px;
-  cursor: pointer;
-}
-
-.MuiInputAdornment-positionEnd {
-  cursor: pointer;
-}

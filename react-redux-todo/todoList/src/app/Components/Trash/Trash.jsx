@@ -4,6 +4,8 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch } from 'react-redux';
 import { actions }  from '../../Containers/TodoList/todoSlice';
 
+import './Trash.scss'
+
 
  const Trash = (props) => {
 
@@ -22,6 +24,5 @@ import { actions }  from '../../Containers/TodoList/todoSlice';
   
     );
   };
-
 
 export default Trash
