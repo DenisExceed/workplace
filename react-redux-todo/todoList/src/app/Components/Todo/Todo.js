@@ -15,7 +15,7 @@ const history = useHistory();
 
 const logOutButton = () => {
   localStorage.removeItem('token');
-  history.push('/');
+  history.push('/login');
 }
 
   return (

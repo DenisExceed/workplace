@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { connect } from 'react-redux';
 import { createUser } from '../../../Components/Auth/AuthReducer';
-import { useHistory } from 'react-router-dom';
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link } from '@material-ui/core'
 import { AccountCircleRounded } from '@material-ui/icons'
 import { Alert, Stack } from '@mui/material';
@@ -36,20 +35,8 @@ const [passwordError, setPasswordError] = useState('this field must not be empty
 
 const [formValid, setFormValid] = useState(false)
 
-const history = useHistory();
-
 const buttonHandler = () => {
     props.createUser({userName, password});
-
-    setTimeout(() => {
-        const token = JSON.parse(localStorage.getItem('token'));
-        if (token) {
-            history.push('/todo');
-          } else {
-            localStorage.removeItem('token');
-          }
-    }, 3000);
-
 }
 
 useEffect(() => {
@@ -181,10 +168,10 @@ const blurHandler = (e) => {
                 </Button>
 
                 <Typography>Do you have an account?
-                     <Link style={signUpStyle} href="/" >
+                     <Link style={signUpStyle} href="/login" >
                         Login 
                      </Link>
-                     <Link style={signUpStyle} href="/todo" >
+                     <Link style={signUpStyle} href="/" >
                         ToDo 
                      </Link>
                 </Typography>

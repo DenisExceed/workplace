@@ -33,7 +33,6 @@ export const createItem = createAsyncThunk(
   }
 )
 
-
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,

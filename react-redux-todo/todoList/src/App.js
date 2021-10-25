@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { authActions } from './app/Components/Auth/AuthReducer';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Todo from './app/Components/Todo/Todo';
 import LoginForm from './app/Components/Auth/LoginForm/LoginForm';
@@ -14,9 +16,42 @@ const mapStateToProps = (state) => {
   };
 }
 
-export class App extends React.Component {
- 
-render() {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setToken: (token) => dispatch(authActions.createToken(token)),
+  }
+};
+
+export const App = (props) => {
+
+  const history = useHistory();
+
+  useEffect(() => {
+
+    const isToken = () => {
+           
+      const token = JSON.parse(localStorage.getItem('token'));
+        
+      
+      if (token) {
+       axios
+        .post(`http://localhost:5000/auth/token`, '', { headers: { token } })
+
+        .then((res) => {
+
+          if (!res.data.isUser) {
+            localStorage.removeItem('token')
+            history && history.push('/login')
+          }
+
+        })
+      }
+      
+    };
+
+    isToken();
+  }, [history]);
+
 
   const isAuth = (component, redirectPath) => {
 
@@ -34,15 +69,14 @@ render() {
     <div className="App">
       <section>
       <Switch>
-       <Route exact path='/' component={LoginForm} />
+       <Route exact path='/login' component={LoginForm} />
        <Route path='/registration' component={RegistrationForm} />
-       <Route path="/todo">{isAuth(<Todo />, '/')}</Route> 
+       <Route path="/">{isAuth(<Todo />, '/login')}</Route> 
        </Switch>
       </section>
     </div>
   </Router>
   );
- }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

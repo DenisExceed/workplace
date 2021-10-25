@@ -1,12 +1,30 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-// import { createItem } from '../../Containers/TodoList/todoSlice';
+import { connect } from 'react-redux';
+import { logIn } from '../../../Components/Auth/AuthReducer';
+import { useHistory } from 'react-router-dom';
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link } from '@material-ui/core'
 import { AccountCircleRounded } from '@material-ui/icons'
+import { Alert, Stack } from '@mui/material';
 
-import './LoginForm.scss'
+import '../LoginForm/LoginForm.scss'
 
-const LoginForm = () => {
+
+const mapStateToProps = (state) => {
+    return {
+      ...state
+    };
+  }
+  
+const mapDispatchToProps = (dispatch) => {
+    return {
+      logIn: (props) => dispatch(logIn(props)),
+    }
+  };
+
+
+const LoginForm = (props) => {
+const history = useHistory(); 
 
 const [userName, setUserName] = useState('')
 const [password, setPassword] = useState('')
@@ -19,6 +37,12 @@ const [passwordError, setPasswordError] = useState('this field must not be empty
 
 const [formValid, setFormValid] = useState(false)
 
+
+const buttonHandler = () => {
+    props.logIn({userName, password})
+    .then(() => history.push('/'))
+}
+
 useEffect(() => {
     if(userNameError || passwordError) {
         setFormValid(false)
@@ -30,6 +54,7 @@ useEffect(() => {
 
 
 const userNameHandler = (e) => {
+    
     setUserName(e.target.value)
 
     const userName_validate = (e) => {
@@ -51,6 +76,7 @@ const userNameHandler = (e) => {
 }
 
 const passwordHandler = (e) => {
+
     setPassword(e.target.value)
 
     const password_validate = (e) => {
@@ -81,6 +107,8 @@ const blurHandler = (e) => {
             setPasswordDirty(true)
             break
         
+        default:
+            break
     }
 }
 
@@ -95,37 +123,47 @@ const blurHandler = (e) => {
             <Paper elevation={10} style={paperStyle}>
                 <Grid align='center'>
                      <Avatar style={avatarStyle}><AccountCircleRounded/></Avatar>
-                    <h2>Sign In TodoList || <span style={{color:'#f3005f'}}>Login</span></h2>
+                    <h2>Sign Up TodoList || <span style={{color:'#f3005f'}}>Login</span></h2>
                 </Grid>
-                
 
                 <TextField 
                   label='Username'
                   name='username'  
                   placeholder='Enter username'
-                  onChange={(e) => userNameHandler(e)}
-                  onBlur={(e) => blurHandler(e)}
+                  onChange={userNameHandler}
+                  onBlur={blurHandler}
                   value={userName}
                   style={inputStyle} 
                   fullWidth required/>
                   {(userNameDirty && userNameError) && <div className="textError">{userNameError}</div>} 
                 
-                
                 <TextField
                   label='Password'
                   name='password' 
                   placeholder='Enter password'
-                  onChange={(e) => passwordHandler(e)}
-                  onBlur={(e) => blurHandler(e)}
+                  onChange={passwordHandler}
+                  onBlur={blurHandler}
                   value={password}
                   className="inputError"
                   type='password'
                   style={inputStyle}  
                   fullWidth required/>
                   {(passwordDirty && passwordError) && <div className="textError">{passwordError}</div>} 
+                  
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                { props.AuthReducer.message ? (
+                    <Alert severity={props.AuthReducer.status === 200 ? 'success' : 'error'}>
+                    {props.AuthReducer.message}
+                    </Alert> 
+                    ) : (
+                    <></>
+                    )
+                }
+                </Stack>
 
                 <Button 
-                  disabled={!formValid} 
+                  disabled={!formValid}
+                  onClick={buttonHandler}
                   type='submit' 
                   color='primary' 
                   variant="contained" 
@@ -137,7 +175,7 @@ const blurHandler = (e) => {
                      <Link style={signUpStyle} href="/registration" >
                         Register 
                      </Link>
-                     <Link style={signUpStyle} href="/todo" >
+                     <Link style={signUpStyle} href="/" >
                         ToDo 
                      </Link>
                 </Typography>
@@ -146,4 +184,4 @@ const blurHandler = (e) => {
     )
 }
 
-export default LoginForm;
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
