@@ -27,17 +27,16 @@ const mapDispatchToProps = (dispatch) => {
 
 export class TodoInput extends React.Component {
 
+  
   handleChange = (event) => {
     this.props.changeInput(event.target.value)
   }
-
   handleSubmit = (event) => {
-
     if (this.props.todoSlice.value.trim() === '' ||
     !this.props.todoSlice.value.length) return;
 
     if (event.key === 'Enter' || event.type === 'click') {
-      this.props.submitInput(this.props.todoSlice.value);
+      this.props.submitInput({text: this.props.todoSlice.value, userId: this.props.AuthReducer.userId});
       this.props.changeInput('');
     }
 
@@ -47,6 +46,14 @@ export class TodoInput extends React.Component {
     await axios
       .get(`http://localhost:5000`)
       .then((res) => {
+        console.log('d', res);
+
+        const userItems = () => {
+        res.data.forEach(userId => {
+          return userId
+        })}
+//массив со всеми userId -> перебрать весь этот массив на совпадение с userId со стейта и вернуть в новую переменную, выводить эту новую переменную в getTodos
+        console.log(userItems);
         this.props.getTodos(res.data);
       })
       .catch((error) => console.log('Ошибка', error));
@@ -54,6 +61,7 @@ export class TodoInput extends React.Component {
   }
 
   render() {
+
     return (
       <>
         <Input id="input"

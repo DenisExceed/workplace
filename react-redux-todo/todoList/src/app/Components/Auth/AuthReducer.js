@@ -9,6 +9,7 @@ export const initialState = {
   password: '',
   message: '',
   status: 0,
+  userId: ''
 
 };
 
@@ -21,9 +22,17 @@ export const createUser = createAsyncThunk(
       .post(`http://localhost:5000/auth/registration`, { username: props.userName, password: props.password })
 
       .then((res) => {
-        localStorage.setItem('token', JSON.stringify(res.data?.token))
-      
-        return {status: res.status, message: res.data.message}
+        const token = JSON.parse(localStorage.getItem('token'));
+        
+        if (token) {
+         localStorage.removeItem('token');
+        }
+
+        if(!token) {
+         localStorage.setItem('token', JSON.stringify(res.data?.token))
+        }
+        
+        return {status: res.status, message: res.data.message, userId: res.data.userId}
 
       })  
 
@@ -54,7 +63,7 @@ export const logIn = createAsyncThunk(
            localStorage.setItem('token', JSON.stringify(res.data?.token))
         }
        
-        return {status: res.status, message: res.data.message, token: res.data.token}
+        return { status: res.status, message: res.data.message, token: res.data.token, userId: res.data.userId }
     
       })  
     
@@ -78,9 +87,15 @@ export const authSlice = createSlice({
       return {
        ...state,
        token: payload
-     };
+      }
+    },
 
-   },
+    createUserId: (state = initialState, { payload }) => {
+      return {
+       ...state,
+       userId: payload
+      }
+    },
   },
 
   extraReducers: (builder) => {
@@ -90,6 +105,7 @@ export const authSlice = createSlice({
       createUser.fulfilled, (state, action) => {
         state.message = (action.payload.message)
         state.status = (action.payload.status)
+        state.userId = (action.payload.userId)
       },
     );
 
@@ -98,6 +114,7 @@ export const authSlice = createSlice({
         state.message = (action.payload.message)
         state.status = (action.payload.status)
         state.token = (action.payload.token)
+        state.userId = (action.payload.userId)
       }
     );
 

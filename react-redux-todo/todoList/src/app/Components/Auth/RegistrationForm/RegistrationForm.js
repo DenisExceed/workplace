@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { connect } from 'react-redux';
 import { createUser } from '../../../Components/Auth/AuthReducer';
+import { useHistory } from 'react-router-dom';
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link } from '@material-ui/core'
 import { AccountCircleRounded } from '@material-ui/icons'
 import { Alert, Stack } from '@mui/material';
@@ -35,8 +36,15 @@ const [passwordError, setPasswordError] = useState('this field must not be empty
 
 const [formValid, setFormValid] = useState(false)
 
+const history = useHistory();
+
 const buttonHandler = () => {
-    props.createUser({userName, password});
+    props.createUser({userName, password})
+    .then(() => 
+      setTimeout(() => {
+        history.push('/')
+      }, 1000)
+    )
 }
 
 useEffect(() => {

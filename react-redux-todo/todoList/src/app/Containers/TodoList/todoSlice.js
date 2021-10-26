@@ -7,15 +7,17 @@ export const initialState = {
   item: '',
   value: '',
   id: 0,
-  status: 'All',
+  status: 'All'
 };
 
 export const createItem = createAsyncThunk(
 
 'Add:',
-  async (text) => {
+  async (data) => {
+
     const newTodo = await axios
-      .post(`http://localhost:5000`, { value: text, checked: false })
+
+      .post(`http://localhost:5000`, { value: data.text, checked: false, userId: data.userId })
       .then((res) => {
 
         const item = {

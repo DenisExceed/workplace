@@ -3,7 +3,7 @@ import axios from 'axios';
 import { authActions } from './app/Components/Auth/AuthReducer';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Redirect, useHistory } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Todo from './app/Components/Todo/Todo';
 import LoginForm from './app/Components/Auth/LoginForm/LoginForm';
 import RegistrationForm from './app/Components/Auth/RegistrationForm/RegistrationForm';
@@ -18,13 +18,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setToken: (token) => dispatch(authActions.createToken(token)),
+    setToken: (token) => dispatch(authActions.createToken(token))
   }
 };
 
 export const App = (props) => {
 
   const history = useHistory();
+  const dispatch = useDispatch(); 
 
   useEffect(() => {
 
@@ -39,6 +40,9 @@ export const App = (props) => {
 
         .then((res) => {
 
+          const userIdData = res.data.userId
+          dispatch(authActions.createUserId(userIdData))
+
           if (!res.data.isUser) {
             localStorage.removeItem('token')
             history && history.push('/login')
@@ -50,7 +54,7 @@ export const App = (props) => {
     };
 
     isToken();
-  }, [history]);
+  }, [history, dispatch]);
 
 
   const isAuth = (component, redirectPath) => {
