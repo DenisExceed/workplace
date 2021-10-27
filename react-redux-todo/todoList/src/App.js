@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { authActions } from './app/Components/Auth/AuthReducer';
+import { actions } from './app/Containers/TodoList/todoSlice';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Redirect, useHistory } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
@@ -29,32 +30,35 @@ export const App = (props) => {
 
   useEffect(() => {
 
-    const isToken = () => {
-           
+   const isToken = async () => {
+
+    try {
       const token = JSON.parse(localStorage.getItem('token'));
-        
       
-      if (token) {
-       axios
-        .post(`http://localhost:5000/auth/token`, '', { headers: { token } })
+       if (token) {
+          
+          const resData = await  axios.post(`http://localhost:5000/auth/token`, '', { headers: { token } })
+             
+          const userIdData = resData.data.userId
+           dispatch(authActions.createUserId(userIdData))
 
-        .then((res) => {
-
-          const userIdData = res.data.userId
-          dispatch(authActions.createUserId(userIdData))
-
-          if (!res.data.isUser) {
+          if (!resData.data.isUser) {
             localStorage.removeItem('token')
             history && history.push('/login')
           }
 
-        })
+          const userId = props.AuthReducer.userId;
+          const resDataId = await axios.get(`http://localhost:5000`, { headers: { userId } })
+           dispatch(actions.get(resDataId.data))
+       }
+
+    } catch (error) {
+         console.log('Возникла ошибка');
       }
-      
     };
 
     isToken();
-  }, [history, dispatch]);
+  }, [history, props.AuthReducer.userId, dispatch]);
 
 
   const isAuth = (component, redirectPath) => {

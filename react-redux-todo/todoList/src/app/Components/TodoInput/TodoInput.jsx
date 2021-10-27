@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createItem } from '../../Containers/TodoList/todoSlice';
 import { actions } from '../../Containers/TodoList/todoSlice';
-import axios from 'axios';
 
 import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/icons/AddBox';
@@ -20,8 +19,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     changeInput: (value) => dispatch(actions.handleChange(value)),
-    submitInput: (res) => dispatch(createItem(res)),
-    getTodos: (res) => dispatch(actions.get(res)),
+    submitInput: (res) => dispatch(createItem(res))
   }
 };
 
@@ -39,24 +37,6 @@ export class TodoInput extends React.Component {
       this.props.submitInput({text: this.props.todoSlice.value, userId: this.props.AuthReducer.userId});
       this.props.changeInput('');
     }
-
-  }
-
-  async componentDidMount() {
-    await axios
-      .get(`http://localhost:5000`)
-      .then((res) => {
-        console.log('d', res);
-
-        const userItems = () => {
-        res.data.forEach(userId => {
-          return userId
-        })}
-//массив со всеми userId -> перебрать весь этот массив на совпадение с userId со стейта и вернуть в новую переменную, выводить эту новую переменную в getTodos
-        console.log(userItems);
-        this.props.getTodos(res.data);
-      })
-      .catch((error) => console.log('Ошибка', error));
 
   }
 

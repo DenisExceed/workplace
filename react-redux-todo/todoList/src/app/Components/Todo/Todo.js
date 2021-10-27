@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { authActions } from '../Auth/AuthReducer';
 import TodoList from "../../Containers/TodoList/TodoList";
 import TodoInput from "../TodoInput/TodoInput";
 import Card from '@material-ui/core/Card';
@@ -8,13 +10,26 @@ import { Stack, Button } from '@mui/material';
 
 import '../../../App.css';
 
+const mapStateToProps = (state) => {
+  return {
+    ...state
+  };
+}
 
-const Todo = () => {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteTempUserData: () => dispatch(authActions.deleteUserId())
+  }
+};
+
+
+const Todo = (props) => {
 
 const history = useHistory();
 
 const logOutButton = () => {
   localStorage.removeItem('token');
+  props.deleteTempUserData();
   history.push('/login');
 }
 
@@ -46,4 +61,4 @@ const logOutButton = () => {
   );
 }
 
-export default Todo;
+export default connect(mapStateToProps, mapDispatchToProps)(Todo);

@@ -17,7 +17,9 @@ class itemController {
 
     async getAllItems(request, response) {
         try {
-            const allItems = await items.find();
+            const userId = request.headers.userid;
+            const allItems = await items.find({userId});
+            console.log(allItems);
             return response.json(allItems)
 
         } catch (e) {
@@ -81,19 +83,6 @@ class itemController {
             response.status(500).json(e);
         }
       }
-
-    //   deleteChecked = async (req, res) => {
-    //     const ids = req.body.ids;
-    //     try {
-    //         console.log('22222222');
-    //       await todosModel.deleteMany({
-    //         _id: { $in: ids }
-    //       });
-    //       return res.json({status: 'ok'});
-    //     } catch (error) {
-    //       return res.json({status: 'error', error})
-    //     }
-    //   }
 }
 
 export default new itemController;

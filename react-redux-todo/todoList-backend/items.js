@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const Items = new mongoose.Schema({
-    user: {type: String, required: false},
-    value: {type: String, required: false},
-    checked: {type: Boolean, required: false},
+    value: {type: String, required: true},
+    checked: {type: Boolean, required: true},
+    userId: {type: String, required: true},
 })
 
 export default mongoose.model('Items', Items)

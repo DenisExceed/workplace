@@ -96,6 +96,13 @@ export const authSlice = createSlice({
        userId: payload
       }
     },
+
+    deleteUserId: (state = initialState, { payload }) => {
+      return {
+       ...state,
+       userId: ''
+      }
+    },
   },
 
   extraReducers: (builder) => {
