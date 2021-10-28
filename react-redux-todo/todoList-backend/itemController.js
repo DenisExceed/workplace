@@ -11,16 +11,31 @@ class itemController {
                     error: 'Oops, error',
                 });
             }
-            response.json({ task });
+            console.log(`task`, task)
+            const result = {
+                id: task._id,
+                value: task.value,
+                checked: task.checked
+                }
+                console.log(`result`, result)
+            response.json(result);
         });
     }
 
     async getAllItems(request, response) {
         try {
             const userId = request.headers.userid;
+
             const allItems = await items.find({userId});
-            console.log(allItems);
-            return response.json(allItems)
+
+            const result = allItems.map((item) => ({
+                value: item.value,
+                checked: item.checked,
+                userId: item.userId,
+                id: item._id
+                }));
+
+            return response.json(result)
 
         } catch (e) {
             response.status(500).json(e)
@@ -63,6 +78,7 @@ class itemController {
             const { id } = request.params
 
             await items.findByIdAndDelete(id);
+
             return response.json(items)
 
         } catch (e) {
@@ -78,6 +94,7 @@ class itemController {
           await items.deleteMany({
             _id: { $in: itemId }
           });
+          
           return response.json({status: 'OK'});
         } catch (e) {
             response.status(500).json(e);

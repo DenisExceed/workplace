@@ -1,23 +1,20 @@
 import React from 'react';
-import Trash from "../../Components/Trash/Trash";
-import RadioBadge from "../../Components/RadioBadge/RadioBadge";
+import Trash from '../Trash/Trash';
+import RadioBadge from '../RadioBadge/RadioBadge';
 
 import './TodoItem.scss';
 
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo }) => (
+  <li>
+    <div className="itemsEl">
+      <RadioBadge
+        id={todo.id}
+        checked={todo.checked}
+      />
+      <span id="itemText" className={todo.checked ? 'checked' : ''}>{todo.value}</span>
+      <Trash id={todo.id} />
+    </div>
+  </li>
+);
 
-  return (
-    <li id={todo.id}>
-      <div className="itemsEl">
-        <RadioBadge
-          id={todo._id}
-          checked={todo.checked}
-        />
-        <span id="itemText" className={todo.checked ? 'checked' : ''}>{todo.value}</span>
-        <Trash id={todo._id}/>
-      </div>
-    </li>
-  );
-}
-
-export default TodoItem
+export default TodoItem;

@@ -5,6 +5,6 @@ import AuthReducer from './Components/Auth/AuthReducer';
 export default configureStore({
   reducer: {
     todoSlice,
-    AuthReducer
+    AuthReducer,
   },
 });

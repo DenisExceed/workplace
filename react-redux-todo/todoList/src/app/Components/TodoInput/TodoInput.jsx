@@ -1,65 +1,69 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createItem } from '../../Containers/TodoList/todoSlice';
-import { actions } from '../../Containers/TodoList/todoSlice';
 
 import Input from '@material-ui/core/Input';
-import IconButton from '@material-ui/icons/AddBox';
+import IconButton from '@material-ui/core/IconButton';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { actions, createItem } from '../../Containers/TodoList/todoSlice';
 
-import './Todoinput.scss'
+import './Todoinput.scss';
 
-const mapStateToProps = (state) => {
-  return {
-    ...state
-  };
-}
+const mapStateToProps = (state) => ({
+  ...state,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeInput: (value) => dispatch(actions.handleChange(value)),
-    submitInput: (res) => dispatch(createItem(res))
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+  changeInput: (value) => dispatch(actions.handleChange(value)),
+  submitInput: (res) => dispatch(createItem(res)),
+});
 
 export class TodoInput extends React.Component {
-
-  
   handleChange = (event) => {
-    this.props.changeInput(event.target.value)
+    const { changeInput } = this.props;
+    changeInput(event.target.value);
   }
+
   handleSubmit = (event) => {
-    if (this.props.todoSlice.value.trim() === '' ||
-    !this.props.todoSlice.value.length) return;
+    const {
+      todoSlice,
+      AuthReducer,
+      submitInput,
+      changeInput,
+    } = this.props;
+    if (todoSlice.value.trim() === ''
+    || !todoSlice.value.length) return;
 
     if (event.key === 'Enter' || event.type === 'click') {
-      this.props.submitInput({text: this.props.todoSlice.value, userId: this.props.AuthReducer.userId});
-      this.props.changeInput('');
+      submitInput(
+        { text: todoSlice.value, userId: AuthReducer.userId },
+      );
+      changeInput('');
     }
-
   }
 
   render() {
-
+    const { todoSlice } = this.props;
     return (
       <>
-        <Input id="input"
-          value={this.props.todoSlice.value}
+        <Input
+          id="input"
+          value={todoSlice.value}
           onKeyPress={this.handleSubmit}
           onChange={this.handleChange}
           className="allTodoInput"
           placeholder="Enter your task"
-          endAdornment={
+          endAdornment={(
             <InputAdornment position="end">
               <IconButton onClick={this.handleSubmit}>
                 <AddBoxIcon className="hand" />
               </IconButton>
-            </InputAdornment>}
+            </InputAdornment>
+          )}
         />
-      </>);
+      </>
+    );
   }
-
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoInput);

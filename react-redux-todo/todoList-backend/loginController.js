@@ -20,6 +20,7 @@ class loginController {
       }
 
       const { username, password } = req.body;
+
       const preUser = await User.findOne({ username });
 
       if (preUser) {
@@ -28,9 +29,12 @@ class loginController {
 
       const hashPassword = bcrypt.hashSync(password, 5);
       const user = new User({ username, password: hashPassword });
+
       await user.save();
+
       const token = generateAccessToken(user.username);
       const userId = user._id;
+
       return res.json({
         message: "Пользователь успешно зарегистрирован",
         token: token,
@@ -69,7 +73,9 @@ class loginController {
     try {
       const checkUser = { isUser: false, userId: 0 };
     if (req.decodedUserId) {
+      
         const user = await User.findById(req.decodedUserId);
+
         if (user) {
             checkUser.isUser = true;
             checkUser.userId = user._id;

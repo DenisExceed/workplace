@@ -1,181 +1,156 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-
 export const initialState = {
   todos: [],
   item: '',
   value: '',
   id: 0,
-  status: 'All'
+  status: 'All',
 };
 
 export const createItem = createAsyncThunk(
 
-'Add:',
+  'Add:',
   async (data) => {
-
     const newTodo = await axios
 
-      .post(`http://localhost:5000`, { value: data.text, checked: false, userId: data.userId })
+      .post('http://localhost:5000', { value: data.text, checked: false, userId: data.userId })
       .then((res) => {
-
         const item = {
-          _id: res.data.task._id,
-          value: res.data.task.value,
+          id: res.data.id,
+          value: res.data.value,
           checked: false,
-        }
-        
+        };
+
         return item;
       })
-      .catch((error) => console.log('Ошибка', error));
+      .catch((error) => { throw new Error('Ошибка', error); });
 
     return newTodo;
-
-  }
-)
+  },
+);
 
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {
 
-    handleChange: (state = initialState, { payload }) => {
-       return {
+    handleChange: (state = initialState, { payload }) => ({
+      ...state,
+      value: payload,
+    }),
+
+    get: (state = initialState, { payload }) => ({
+      ...state,
+      todos: payload,
+    }),
+
+    remove: (state = initialState, { payload }) => {
+      const id = payload;
+      const newTodos = state.todos.filter((item) => item.id !== id);
+
+      axios
+        .delete(`http://localhost:5000/${id}/`);
+
+      return {
         ...state,
-        value: payload
+        todos: newTodos,
       };
     },
 
-    get: (state = initialState, { payload }) => {
-      return {
-        ...state,
-        todos: payload
-      }
-    },
-
-
-    remove: (state = initialState, {payload}) => {  
-
-      const id = payload;
-      const newTodos =  state.todos.filter(item => item._id !== id);
-
-      axios
-      .delete(`http://localhost:5000/${id}/`)
-      
-        return {
-          ...state,
-          todos: newTodos
-        };
-    },
-
-    markAsChecked: (state = initialState, {payload}) => {  
-
+    markAsChecked: (state = initialState, { payload }) => {
       const id = payload;
 
-      const todos = [...state.todos].map(({...item}) => {
-        if (item._id === id) {
+      const todos = [...state.todos].map(({ ...item }) => {
+        if (item.id === id) {
           item.checked = !item.checked;
 
           axios
-            .put(`http://localhost:5000/${id}/`, { checked: true })        
+            .put(`http://localhost:5000/${id}/`, { checked: true });
         }
 
-        if (item._id === id && !item.checked) {
+        if (item.id === id && !item.checked) {
           axios
-            .put(`http://localhost:5000/${id}/`, { checked: false })        
+            .put(`http://localhost:5000/${id}/`, { checked: false });
         }
 
-        return item  
+        return item;
       });
 
       return {
         ...state,
-        todos: todos
-      }
-
+        todos,
+      };
     },
 
-    clearCompleted: (state) => {  
-      
-      const notCompleted = state.todos.filter(item => !item.checked);
-      const completed = state.todos.filter(item => item.checked);
+    clearCompleted: (state) => {
+      const notCompleted = state.todos.filter((item) => !item.checked);
+      const completed = state.todos.filter((item) => item.checked);
 
       axios
-      .post('http://localhost:5000/deleteChecked', {itemId: completed.map(item => item._id)});
+        .post('http://localhost:5000/deleteChecked', { itemId: completed.map((item) => item.id) });
 
-        return {
-          ...state,
-          todos: notCompleted
-        };    
+      return {
+        ...state,
+        todos: notCompleted,
+      };
     },
 
     checkAll: (state) => {
+      const status = state.todos.some((item) => item.checked);
 
-        const status = state.todos.some(item => item.checked);
-          
-        const mapAllTodos = (checkStatus) => {
+      const mapAllTodos = (checkStatus) => [...state.todos].map(({ ...item }) => {
+        item.checked = checkStatus;
 
-          return [...state.todos].map(({...item}) => {
-            
-            item.checked = checkStatus;
-
-            if(item.checked) {
-              axios
-              .put(`http://localhost:5000/`, { checked: true })  
-            }
-
-            if(!item.checked) {
-              axios
-              .put(`http://localhost:5000/`, { checked: false })  
-            }
-
-            return item;
-          });
+        if (item.checked) {
+          axios
+            .put('http://localhost:5000/', { checked: true });
         }
 
-        const todos = mapAllTodos(!status);
-   
-        return {
-          ...state,
-          todos: todos,
-        };  
-    },
+        if (!item.checked) {
+          axios
+            .put('http://localhost:5000/', { checked: false });
+        }
 
-    All: (state) => {
+        return item;
+      });
+
+      const todos = mapAllTodos(!status);
+
       return {
         ...state,
-        status: 'All',
+        todos,
       };
     },
-    
-    ToDo: (state) => {
-      return {
-        ...state,
-        status: 'Todo',
-      }; 
-    },
 
-    Completed: (state) => {
-      return {
-        ...state,
-        status: 'Completed',
-      };
-    }
+    All: (state) => ({
+      ...state,
+      status: 'All',
+    }),
+
+    ToDo: (state) => ({
+      ...state,
+      status: 'Todo',
+    }),
+
+    Completed: (state) => ({
+      ...state,
+      status: 'Completed',
+    }),
 
   },
   extraReducers: (builder) => {
-
     builder.addCase(
-      
-      createItem.fulfilled, (state, action) => {
-       state.todos.push(action.payload)
-      }
 
-    )
+      createItem.fulfilled, (state, action) => {
+        state.todos.push(action.payload);
+      },
+
+    );
   },
 });
 
-export const actions = todoSlice.actions;
+export const { actions } = todoSlice;
 
 export default todoSlice.reducer;
