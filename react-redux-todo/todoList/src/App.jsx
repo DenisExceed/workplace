@@ -42,7 +42,7 @@ export const App = (props) => {
             history.push('/login');
           }
 
-          const { userId } = props.AuthReducer;
+          const { userId } = AuthReducer;
           const resDataId = await axios.get('http://localhost:5000', { headers: { userId } });
           dispatch(actions.get(resDataId.data));
         }
@@ -52,6 +52,7 @@ export const App = (props) => {
     };
 
     isToken();
+    // eslint-disable-next-line
   }, [history, AuthReducer.userId, dispatch]);
 
   const isAuth = (component, redirectPath) => {

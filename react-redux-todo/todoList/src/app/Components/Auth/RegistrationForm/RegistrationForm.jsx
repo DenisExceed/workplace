@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import {
   Grid, Paper, Avatar, TextField, Button, Typography, Link,
 } from '@material-ui/core';
-import { AccountCircleRounded } from '@material-ui/icons';
+import { AddBoxRounded } from '@material-ui/icons';
 import { Alert, Stack } from '@mui/material';
 import { createUser } from '../AuthReducer';
 
@@ -112,10 +112,10 @@ const RegistrationForm = (props) => {
     <Grid>
       <Paper elevation={10} style={paperStyle}>
         <Grid align="center">
-          <Avatar style={avatarStyle}><AccountCircleRounded /></Avatar>
+          <Avatar style={avatarStyle}><AddBoxRounded /></Avatar>
           <h2>
             Sign Up TodoList ||
-            <span style={{ color: '#f3005f' }}>Registration</span>
+            <span style={{ color: '#f3005f', paddingLeft: '11px' }}>Registration</span>
           </h2>
         </Grid>
 
@@ -173,9 +173,6 @@ const RegistrationForm = (props) => {
           Do you have an account?
           <Link style={signUpStyle} href="/login">
             Login
-          </Link>
-          <Link style={signUpStyle} href="/">
-            ToDo
           </Link>
         </Typography>
       </Paper>

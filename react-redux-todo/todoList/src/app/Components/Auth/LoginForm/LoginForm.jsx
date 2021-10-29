@@ -113,7 +113,7 @@ const LoginForm = (props) => {
           <Avatar style={avatarStyle}><AccountCircleRounded /></Avatar>
           <h2>
             Sign Up TodoList ||
-            <span style={{ color: '#f3005f' }}>Login</span>
+            <span style={{ color: '#f3005f', paddingLeft: '11px' }}>Login</span>
           </h2>
         </Grid>
 
@@ -171,9 +171,6 @@ const LoginForm = (props) => {
           Do you haven`t an account?
           <Link style={signUpStyle} href="/registration">
             Register
-          </Link>
-          <Link style={signUpStyle} href="/">
-            ToDo
           </Link>
         </Typography>
       </Paper>
